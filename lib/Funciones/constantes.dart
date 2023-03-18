@@ -12,7 +12,7 @@ var myAppBar = AppBar(
 );
 var myDrawer = Drawer(
   child: ListView(
-    padding:  const EdgeInsets.all(15),
+    padding:  const EdgeInsets.all(2),
     children: [
       Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -23,8 +23,8 @@ var myDrawer = Drawer(
         ],
       ),
       IconButton(
-        padding: const EdgeInsets.only(top: 40, bottom: 40),
-        iconSize: 60,
+        padding: const EdgeInsets.only(top: 20, bottom: 20),
+        iconSize: 30,
         icon: const Icon(Icons.search),
         onPressed: () {
 
@@ -32,8 +32,8 @@ var myDrawer = Drawer(
         },
       ),
       IconButton(
-        padding: const EdgeInsets.only(top: 40,bottom: 40),
-        iconSize: 60,
+        padding: const EdgeInsets.only(top: 20,bottom: 20),
+        iconSize: 30,
         icon: const Icon(Icons.more_horiz),
           highlightColor: Colors.lightGreen,
         onPressed: () {
@@ -41,8 +41,8 @@ var myDrawer = Drawer(
       ),
 
       IconButton(
-        padding: const EdgeInsets.only(top: 40,bottom: 40),
-        iconSize: 60,
+        padding: const EdgeInsets.only(top: 20,bottom: 20),
+        iconSize: 30,
         icon: const Icon(Icons.settings_outlined),
         onPressed: () {
 
@@ -54,5 +54,7 @@ var myDrawer = Drawer(
   ),
 
 );
+
+
 
 

@@ -1,18 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:pianta/Home/proyecto.dart';
-import 'package:pianta/register/create_password.dart';
+import 'package:pianta/register/mensaje.dart';
+import 'package:pianta/register/profile.dart';
 import 'package:email_validator/email_validator.dart';
+import 'login.dart';
 
-class profile extends StatefulWidget {
-  const profile({Key? key}) : super(key: key);
+class create_password1 extends StatefulWidget {
+  const create_password1({Key? key}) : super(key: key);
 
   @override
-  State<profile> createState() => _profileState();
+  State<create_password1> createState() => _create_passwordState1();
 }
 
-class _profileState extends State<profile> {
+class _create_passwordState1 extends State<create_password1> {
+  bool _showPassword = false;
+  bool _showPassword2 = false;
+  TextEditingController password = TextEditingController();
+  TextEditingController confirmpassword = TextEditingController();
+
   final _keyForm = GlobalKey<FormState>();
-  late String name;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,7 +53,7 @@ class _profileState extends State<profile> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: const [
-                          Text('Profile',
+                          Text('Create Password',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 28,
@@ -60,7 +65,7 @@ class _profileState extends State<profile> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: const [
-                          Text('Fill in information your personal data',
+                          Text('Create a password which is hard to guess.',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 22,
@@ -69,12 +74,11 @@ class _profileState extends State<profile> {
                         ],
                       ),
                       const SizedBox(height: 30.0),
-                      //se pone el nombre de ususario a registar
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: const [
                           Text(
-                            'FIRST NAME',
+                            'PASSWORD',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 18,
@@ -82,21 +86,75 @@ class _profileState extends State<profile> {
                           )
                         ],
                       ),
-                      //se ponber el nombre de ususario
+                      //se digita la contrasena
                       TextFormField(
+                        controller: password,
                         validator: (valor) {
-                          if (valor!.isEmpty ||
-                              !RegExp(r'^[a-z A-Z]+$').hasMatch(valor)) {
-                            //allow upper and lower case alphabets and space
-                            return "Please enter your name";
-                          } else {
-                            return null;
+                          if (valor!.isEmpty) {
+                            return 'please entrer passowrd';
                           }
+                          if (valor!.length < 8) {
+                            return 'la contrasena tiene que tener almenos 8 caracteres ';
+                          }
+                          return null;
                         },
-                        decoration:
-                            const InputDecoration(border: OutlineInputBorder()),
+                        decoration: InputDecoration(
+                            prefixIcon: Icon(Icons.lock),
+                            border: OutlineInputBorder(),
+                            suffixIcon: GestureDetector(
+                              child: Icon(_showPassword == false
+                                  ? Icons.visibility_off
+                                  : Icons.visibility),
+                              onTap: () {
+                                setState(() {
+                                  _showPassword = !_showPassword;
+                                });
+                              },
+                            )),
+                        obscureText: _showPassword == false ? true : false,
                       ),
                       const SizedBox(height: 25.0),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: const [
+                          Text(
+                            'CONFIRM PASSWORD',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                            ),
+                          )
+                        ],
+                      ),
+                      //se confirma contrasena
+                      TextFormField(
+                        controller: confirmpassword,
+                        validator: (valor) {
+                          if (valor!.isEmpty) {
+                            return 'Please re-enter password';
+                          }
+                          print(password.text);
+                          print(confirmpassword.text);
+                          if (password.text != confirmpassword.text) {
+                            return "Password does not match";
+                          }
+                          return null;
+                        },
+                        decoration: InputDecoration(
+                            prefixIcon: Icon(Icons.lock),
+                            border: OutlineInputBorder(),
+                            suffixIcon: GestureDetector(
+                              child: Icon(_showPassword2 == false
+                                  ? Icons.visibility_off
+                                  : Icons.visibility),
+                              onTap: () {
+                                setState(() {
+                                  _showPassword2 = !_showPassword2;
+                                });
+                              },
+                            )),
+                        obscureText: _showPassword2 == false ? true : false,
+                      ),
                       const SizedBox(height: 25.0),
                       const SizedBox(height: 25.0),
                       Row(
@@ -107,18 +165,18 @@ class _profileState extends State<profile> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => const create_password(),
+                                  builder: (context) => const Login(),
                                 ),
                               );
                             },
                             style: ElevatedButton.styleFrom(
-                                minimumSize: Size(150, 50),
+                                minimumSize: Size(200, 50),
                                 backgroundColor:
                                     Color.fromRGBO(255, 255, 255, 1)),
                             child: const Text(
-                              'Back to password creation',
+                              'LOG IN',
                               style: TextStyle(
-                                  fontSize: 18,
+                                  fontSize: 28,
                                   color: Color.fromRGBO(122, 146, 233, 1)),
                             ),
                           ),
@@ -132,7 +190,7 @@ class _profileState extends State<profile> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => const Proyecto(),
+                                    builder: (context) => const profile(),
                                   ),
                                 );
                               } else {
@@ -141,11 +199,11 @@ class _profileState extends State<profile> {
                               }
                             },
                             style: ElevatedButton.styleFrom(
-                              minimumSize: Size(150, 50),
+                              minimumSize: Size(200, 50),
                               backgroundColor: Color.fromRGBO(0, 191, 174, 1),
                             ),
                             child: const Text(
-                              'Done',
+                              'Next',
                               style: TextStyle(
                                 fontSize: 28,
                               ),

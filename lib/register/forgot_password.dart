@@ -3,6 +3,7 @@ import 'package:pianta/register/create_password.dart';
 import 'package:pianta/register/login.dart';
 import 'package:pianta/register/profile.dart';
 import 'package:pianta/register/reset_password.dart';
+import 'package:email_validator/email_validator.dart';
 
 class forgot_password extends StatefulWidget {
   const forgot_password({Key? key}) : super(key: key);
@@ -12,10 +13,14 @@ class forgot_password extends StatefulWidget {
 }
 
 class _forgot_passwordState extends State<forgot_password> {
+  final _keyForm = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
+        child: Form(
+        key: _keyForm,
           child: Center(
               child: SingleChildScrollView(
         child: Column(
@@ -91,15 +96,24 @@ class _forgot_passwordState extends State<forgot_password> {
                           fontSize: 23,
                         ),
                       )
+
                     ],
                   ),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 0),
-                    child: TextField(
-                      decoration: InputDecoration(
-                        prefixIcon: Icon(Icons.email),
-                        border: OutlineInputBorder(),
-                      ),
+                  TextFormField(
+                    validator: (valor) {
+                      String pattern =
+                          r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+                      RegExp regExp = new RegExp(pattern);
+                      if (valor!.length == 0) {
+                        return 'Plase input your email';
+                      } else if (!regExp.hasMatch(valor)) {
+                        return 'your email is not valid';
+                      }
+                      return null;
+                    },
+                    decoration: const InputDecoration(
+                      prefixIcon: Icon(Icons.email),
+                      border: OutlineInputBorder(),
                     ),
                   ),
                   const SizedBox(height: 20.0),
@@ -109,12 +123,18 @@ class _forgot_passwordState extends State<forgot_password> {
                     children: [
                       ElevatedButton(
                         onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const reset_passaword(),
-                            ),
-                          );
+                          if (_keyForm.currentState!.validate()) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                const create_password(),
+                              ),
+                            );
+                          } else {
+                            print(
+                                'An error has occurred, check your email or password');
+                          }
                         },
                         style: ElevatedButton.styleFrom(
                           minimumSize: Size(350, 70),
@@ -156,6 +176,7 @@ class _forgot_passwordState extends State<forgot_password> {
           ],
         ),
       ))),
+      )
     );
   }
 }

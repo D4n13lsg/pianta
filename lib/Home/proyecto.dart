@@ -7,10 +7,8 @@ import 'package:pianta/Home/new_project.dart';
 import 'package:pianta/Home/project_created.dart';
 import 'package:flutter/material.dart';
 
-
-
 class Proyecto extends StatefulWidget {
-  const Proyecto({super.key});
+  const Proyecto({super.key, required});
 
   @override
   State<Proyecto> createState() => _ProyectoState();
@@ -19,10 +17,8 @@ class Proyecto extends StatefulWidget {
 class _ProyectoState extends State<Proyecto> {
   var pruebaText = 'Project Name';
 
-
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       body: Row(children: [
         myDrawer,
@@ -60,7 +56,6 @@ class _ProyectoState extends State<Proyecto> {
 
                   child: const Text(
                     'Project Created',
-
                     style: TextStyle(
                         fontWeight: FontWeight.normal,
                         fontSize: 20,
@@ -180,17 +175,9 @@ class _ProyectoState extends State<Proyecto> {
                     ),
                   )),
             )
-
           ]),
         ),
       ]),
-
-
-
     );
-
   }
-
 }
-
-

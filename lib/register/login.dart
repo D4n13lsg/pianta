@@ -1,8 +1,8 @@
-
 import 'package:flutter/material.dart';
 import 'package:pianta/register/forgot_password.dart';
 import 'package:pianta/register/signup.dart';
 import 'package:pianta/Home/proyecto.dart';
+import 'package:email_validator/email_validator.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -12,11 +12,16 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  //contrasena
   bool _showPassword = false;
+  final _keyForm = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
+        body: SafeArea(
+      child: Form(
+        key: _keyForm,
         child: Center(
           child: SingleChildScrollView(
             child: Column(
@@ -52,7 +57,7 @@ class _LoginState extends State<Login> {
                               textAlign: TextAlign.center)
                         ],
                       ),
-                      const SizedBox(height: 20.0),
+                      //email usuario
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: const [
@@ -62,19 +67,28 @@ class _LoginState extends State<Login> {
                               fontWeight: FontWeight.bold,
                               fontSize: 18,
                             ),
-                          )
+                          ),
                         ],
                       ),
-                      const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 0),
-                        child: TextField(
-                          decoration: InputDecoration(
-                            prefixIcon: Icon(Icons.email),
-                            border: OutlineInputBorder(),
-                          ),
+                      TextFormField(
+                        validator: (valor) {
+                          String pattern =
+                              r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+                          RegExp regExp = new RegExp(pattern);
+                          if (valor!.length == 0) {
+                            return 'Plase input your email';
+                          } else if (!regExp.hasMatch(valor)) {
+                            return 'your email is not valid';
+                          }
+                          return null;
+                        },
+                        decoration: const InputDecoration(
+                          prefixIcon: Icon(Icons.email),
+                          border: OutlineInputBorder(),
                         ),
                       ),
                       const SizedBox(height: 20.0),
+
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: const [
@@ -89,19 +103,34 @@ class _LoginState extends State<Login> {
                       ),
                       //este textfromfile sirve para dejar ver la contraseña del usuario
                       TextFormField(
+                        //validacion email
+                        validator: (valor) {
+                          RegExp regex = RegExp(
+                              r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$');
+                          if (valor!.isEmpty) {
+                            return 'A password is required to log in';
+                          } else if (valor!.length < 8) {
+                            return 'your password is too short it must have at least 8 characters';
+                          }
+                          return null;
+                        },
+
                         decoration: InputDecoration(
                             prefixIcon: Icon(Icons.lock),
                             border: OutlineInputBorder(),
                             suffixIcon: GestureDetector(
-                              child: Icon( _showPassword == false ? Icons.visibility_off : Icons.visibility),
-                           onTap: (){
+                              child: Icon(_showPassword == false
+                                  ? Icons.visibility_off
+                                  : Icons.visibility),
+                              onTap: () {
                                 setState(() {
                                   _showPassword = !_showPassword;
                                 });
-                           },
+                              },
                             )),
                         obscureText: _showPassword == false ? true : false,
                       ),
+
                       const SizedBox(height: 25.0),
                       Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -127,17 +156,23 @@ class _LoginState extends State<Login> {
                             )
                           ]),
                       const SizedBox(height: 25.0),
+                      //boton para iniciar proyecto
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           ElevatedButton(
                             onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const Proyecto(),
-                                ),
-                              );
+                              if (_keyForm.currentState!.validate()) {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const Proyecto(),
+                                  ),
+                                );
+                              } else {
+                                print(
+                                    'An error has occurred, check your email or password');
+                              }
                             },
                             style: ElevatedButton.styleFrom(
                               minimumSize: Size(350, 70),
@@ -152,7 +187,9 @@ class _LoginState extends State<Login> {
                           ),
                         ],
                       ),
+
                       const SizedBox(height: 25.0),
+
                       Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -165,7 +202,6 @@ class _LoginState extends State<Login> {
                                   ),
                                 );
                               },
-
                               child: const Text(
                                 'Create new account',
                                 style: TextStyle(
@@ -183,6 +219,6 @@ class _LoginState extends State<Login> {
           ),
         ),
       ),
-    );
+    ));
   }
 }
